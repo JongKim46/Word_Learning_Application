@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SecondChooseActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/wordTitle"
+            android:layout_width="293dp"
+            android:layout_height="46dp"
+            android:text="@string/seconds_name"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.468"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.085" />
+
+        <Button
+            android:id="@+id/time_3"
+            android:layout_width="293dp"
+            android:layout_height="46dp"
+            android:text="@string/time_3"
+            tools:layout_editor_absoluteX="59dp"
+            tools:layout_editor_absoluteY="131dp" />
+
+        <Button
+            android:id="@+id/time_5"
+            android:layout_width="293dp"
+            android:layout_height="46dp"
+            android:text="@string/time_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="176dp" />
+
+        <Button
+            android:id="@+id/time_10"
+            android:layout_width="293dp"
+            android:layout_height="46dp"
+            android:text="@string/time_10"
+            tools:layout_editor_absoluteX="59dp"
+            tools:layout_editor_absoluteY="222dp" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="293dp"
+            android:layout_height="46dp"
+            android:text="@string/cancel"
+            tools:layout_editor_absoluteX="59dp"
+            tools:layout_editor_absoluteY="222dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

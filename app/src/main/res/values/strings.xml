@@ -1,0 +1,16 @@
+<resources>
+    <string name="Home">Home</string>
+    <string name="cancel">cancel</string>
+
+    <string name="app_name">JLPT単語学習</string>
+    <string name="N1_button">JLPT N1</string>
+    <string name="N2_button">JLPT N2</string>
+    <string name="N3_button">JLPT N3</string>
+    <string name="N4_button">JLPT N4</string>
+    <string name="N5_button">JLPT N5</string>
+    <string name="seconds_name">単語学習時間選択</string>
+    <string name="time_3">3秒</string>
+    <string name="time_5">5秒</string>
+    <string name="time_10">10秒</string>
+
+</resources>
