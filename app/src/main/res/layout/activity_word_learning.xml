@@ -36,7 +36,7 @@
 
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/kanjiView"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:text="TextView"
@@ -45,7 +45,7 @@
             tools:layout_editor_absoluteY="126dp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/hiraganaView"
             android:layout_width="120dp"
             android:layout_height="30dp"
             android:text="TextView"
@@ -54,10 +54,12 @@
             tools:layout_editor_absoluteY="256dp" />
 
         <ProgressBar
-            android:id="@+id/progressBar1"
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="310dp"
             android:layout_height="40dp"
+            android:max="30"
+            android:progress="0"
             tools:layout_editor_absoluteX="50dp"
             tools:layout_editor_absoluteY="297dp" />
 

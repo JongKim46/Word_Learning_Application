@@ -15,20 +15,27 @@ class SecondChooseActivity : AppCompatActivity() {
 
         val wordLearning = Intent(this, WordLearning::class.java)
         wordLearning.putExtra("wordLever", wordLevle)
-        wordLearning.putExtra("screenCount", "1")
+        wordLearning.putExtra("screenCount", 0)
+        var wordLists = arrayListOf<WordResult>()
+        wordLists.add(WordResult(1,"学習","がくしゅう","あ","え"))
+        wordLists.add(WordResult(2,"単語","たんご","が","き"))
+
         //3秒選択
         time_3.setOnClickListener {
-            wordLearning.putExtra("chooseTime", "3")
+            wordLearning.putExtra("chooseTime", 3)
+            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //5秒選択
         time_5.setOnClickListener {
-            wordLearning.putExtra("chooseTime", "5")
+            wordLearning.putExtra("chooseTime", 5)
+            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //10秒選択
         time_10.setOnClickListener {
-            wordLearning.putExtra("chooseTime", "10")
+            wordLearning.putExtra("chooseTime", 10)
+            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
 

@@ -12,5 +12,7 @@
     <string name="time_3">3秒</string>
     <string name="time_5">5秒</string>
     <string name="time_10">10秒</string>
+    <string name="word_Test">単語学習TEST</string>
+    <string name="test_Results">TEST結果</string>
 
 </resources>
