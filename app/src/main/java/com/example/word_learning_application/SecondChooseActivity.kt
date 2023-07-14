@@ -17,8 +17,8 @@ class SecondChooseActivity : AppCompatActivity() {
         wordLearning.putExtra("wordLever", wordLevle)
         wordLearning.putExtra("screenCount", 0)
         var wordLists = arrayListOf<WordResult>()
-        wordLists.add(WordResult(1,"学習","がくしゅう","あ","え"))
-        wordLists.add(WordResult(2,"単語","たんご","が","き"))
+        wordLists.add(WordResult(1,"学習","がくしゅう","あ","え",0))
+        wordLists.add(WordResult(2,"単語","たんご","が","き",0))
 
         //3秒選択
         time_3.setOnClickListener {

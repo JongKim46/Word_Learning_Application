@@ -1,21 +1,24 @@
 package com.example.word_learning_application
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.widget.Button
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_word_learning.progressBar
 import kotlinx.android.synthetic.main.activity_word_test.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
-
 
 
 class WordTest : AppCompatActivity() {
     // UI処理をするためにHandlerクラス生成
-    val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
+    var running = AtomicBoolean(false)
+    var wordSwitch = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_test)
@@ -23,13 +26,16 @@ class WordTest : AppCompatActivity() {
         var wordLevle = intent.getStringExtra("wordLever")
         var screenCount: Int? = intent?.getIntExtra("screenCount", 0)?.toInt()
         var wordLists = intent?.getSerializableExtra("wordLists") as ArrayList<WordResult>
+        var wordanswer = wordLists[screenCount!!]?.hurigana
 
-        val bnt1 = findViewById<Button>(R.id.button1)
-        val bnt2 = findViewById<Button>(R.id.button2)
-        val bnt3 = findViewById<Button>(R.id.button3)
+        val but1 = findViewById<Button>(R.id.button1)
+        val but2 = findViewById<Button>(R.id.button2)
+        val but3 = findViewById<Button>(R.id.button3)
+        val butarray = arrayOf(but1, but2, but3)
+
 
         wordTitle.text = "$wordLevle 単語学習"
-        wordCount.text = "${screenCount!!+1} /${wordLists.size}"
+        wordCount.text = "${screenCount!! + 1} /${wordLists.size}"
 
         //漢字、ひらがな表示
         TestKanji.text = wordLists[screenCount!!]?.word_kanji
@@ -40,9 +46,37 @@ class WordTest : AppCompatActivity() {
         wordLists[screenCount!!]?.Test2?.let { randomTest.add(it) }
         randomTest = randomTest.shuffled() as ArrayList<String>
 
-        bnt1.text = randomTest[0]
-        bnt2.text = randomTest[1]
-        bnt3.text = randomTest[2]
+        but1.text = randomTest[0]
+        but2.text = randomTest[1]
+        but3.text = randomTest[2]
+
+        //thread実施
+        TimerFun(but1,but2,but3,wordLists,screenCount,wordanswer,wordLevle)
+
+        but1.setOnClickListener{
+            handler.post{
+                wordSwitch = false
+                btnCheck(butarray, wordanswer, but2)
+                stopTime()
+                returnScreen(wordLevle, screenCount, wordLists)
+            }
+        }
+        but2.setOnClickListener{
+            handler.post{
+                wordSwitch = false
+                btnCheck(butarray, wordanswer, but2)
+                stopTime()
+                returnScreen(wordLevle, screenCount, wordLists)
+            }
+        }
+        but3.setOnClickListener{
+            handler.post{
+                wordSwitch = false
+                btnCheck(butarray, wordanswer, but3)
+                stopTime()
+                returnScreen(wordLevle, screenCount, wordLists)
+            }
+        }
 
         Home.setOnClickListener {
             val wordLearning = Intent(this, MainActivity::class.java)
@@ -51,8 +85,73 @@ class WordTest : AppCompatActivity() {
         }
     }
 
-    fun TimerFun(wordLevle: String?, chooseTime: Int, screenCount: Int) {
 
+    /*単語学習画面を表示*/
+    fun returnScreen(
+        wordLevle: String?,
+        screenCount: Int,
+        wordLists: ArrayList<WordResult>
+    ) {
+        if(screenCount < wordLists.size-1){
+            val wordLearning = Intent(this, WordTest::class.java)
+            wordLearning.putExtra("wordLever", wordLevle)
+            wordLearning.putExtra("screenCount", screenCount+1)
+            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
+            println("wordLists : " + wordLists.toString())
+            startActivity(wordLearning)
+            finish()
+        }else{
+            wordTestScreen(wordLevle, wordLists)
+        }
+    }
+
+    fun wordTestScreen(wordLevle: String?, wordLists: ArrayList<WordResult>) {
+        val wordLearning = Intent(this, TestResults::class.java)
+        wordLearning.putExtra("wordLever", wordLevle)
+        wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
+        startActivity(wordLearning)
+        finish()
+    }
+
+    fun btnCheck(butList: Array<Button>, wordanswer: String?, butChoose: Button ) {
+        if (wordanswer == butChoose.text) {
+            butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
+        }else{
+            for(but in butList){
+                if (wordanswer == but.text){
+                    but.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+                }
+            }
+            butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.Red))
+        }
+    }
+
+    fun noClickBtn(but1: Button, but2: Button, but3: Button, wordanswer: String?){
+        if(wordanswer == but1.text){
+            but1.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+        }
+        if(wordanswer == but2.text){
+            but2.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+        }
+        if(wordanswer == but3.text){
+            but3.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+        }
+    }
+
+    fun stopTime(){
+        SystemClock.sleep(70)
+    }
+
+    fun TimerFun(
+        but1: Button,
+        but2: Button,
+        but3: Button,
+        wordLists: ArrayList<WordResult>,
+        screenCount: Int,
+        wordanswer: String?,
+        wordLevle: String?,
+    ) {
+        running.set(true)
         var screenTime = 60
         // テキストをリセット
         thread {
@@ -60,7 +159,7 @@ class WordTest : AppCompatActivity() {
             var i = 0
             while (i < screenTime) {
                 i++
-                // 50ミリ秒間待機
+                // 60ミリ秒間待機
                 // これを設置する理由は、ないと一瞬で終わっちゃうから...
                 SystemClock.sleep(60)
                 // メインスレッドに接続してからUI処理
@@ -69,31 +168,14 @@ class WordTest : AppCompatActivity() {
                     progressBar.progress = i
                 }
             }
-            handler.post {
-                if(screenCount <= 2){
-                    returnScreen(wordLevle, chooseTime, screenCount)
-                }else{
-                    wordTestScreen(wordLevle)
+                if (wordSwitch) {
+                    handler.post {
+                        println("screenCount : " + screenCount)
+                        noClickBtn(but1, but2, but3, wordanswer)
+                        SystemClock.sleep(60)
+                        returnScreen(wordLevle, screenCount, wordLists)
+                    }
                 }
             }
         }
-    }
-
-    /*単語学習画面を表示*/
-    fun returnScreen(wordLevle: String?, chooseTime: Int, screenCount: Int) {
-        val wordLearning = Intent(this, WordLearning::class.java)
-        wordLearning.putExtra("wordLever", wordLevle)
-        wordLearning.putExtra("chooseTime", chooseTime)
-        wordLearning.putExtra("screenCount", screenCount)
-        startActivity(wordLearning)
-        finish()
-    }
-
-    fun wordTestScreen(wordLevle: String?){
-        val wordLearning = Intent(this, WordTest::class.java)
-        wordLearning.putExtra("wordLever", wordLevle)
-        startActivity(wordLearning)
-        finish()
-    }
-
-}
+    }//thread
