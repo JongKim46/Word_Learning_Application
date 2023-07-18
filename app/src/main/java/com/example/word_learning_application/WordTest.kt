@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_word_learning.progressBar
 import kotlinx.android.synthetic.main.activity_word_test.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
+import kotlin.streams.toList
 
 
 class WordTest : AppCompatActivity() {
@@ -56,7 +57,7 @@ class WordTest : AppCompatActivity() {
         but1.setOnClickListener{
             handler.post{
                 wordSwitch = false
-                btnCheck(butarray, wordanswer, but2)
+                btnCheck(butarray, wordanswer, but1, wordLists)
                 stopTime()
                 returnScreen(wordLevle, screenCount, wordLists)
             }
@@ -64,7 +65,7 @@ class WordTest : AppCompatActivity() {
         but2.setOnClickListener{
             handler.post{
                 wordSwitch = false
-                btnCheck(butarray, wordanswer, but2)
+                btnCheck(butarray, wordanswer, but2, wordLists)
                 stopTime()
                 returnScreen(wordLevle, screenCount, wordLists)
             }
@@ -72,7 +73,7 @@ class WordTest : AppCompatActivity() {
         but3.setOnClickListener{
             handler.post{
                 wordSwitch = false
-                btnCheck(butarray, wordanswer, but3)
+                btnCheck(butarray, wordanswer, but3, wordLists)
                 stopTime()
                 returnScreen(wordLevle, screenCount, wordLists)
             }
@@ -97,7 +98,6 @@ class WordTest : AppCompatActivity() {
             wordLearning.putExtra("wordLever", wordLevle)
             wordLearning.putExtra("screenCount", screenCount+1)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
-            println("wordLists : " + wordLists.toString())
             startActivity(wordLearning)
             finish()
         }else{
@@ -113,8 +113,12 @@ class WordTest : AppCompatActivity() {
         finish()
     }
 
-    fun btnCheck(butList: Array<Button>, wordanswer: String?, butChoose: Button ) {
+    fun btnCheck(butList: Array<Button>, wordanswer: String?, butChoose: Button,wordLists: ArrayList<WordResult>, ) {
         if (wordanswer == butChoose.text) {
+            println("wordanswer : " + wordanswer)
+            wordLists.forEach{word ->
+                if (word.hurigana == wordanswer) word.word_choose = 1
+            }
             butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
         }else{
             for(but in butList){
