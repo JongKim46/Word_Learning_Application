@@ -12,7 +12,7 @@ class Word_Select {
         println("connect reid")
         try {
             conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3309/word_learning",
+                "jdbc:mysql://localhost:3306/word_learning",
                 "root",
                 "root"
             )
