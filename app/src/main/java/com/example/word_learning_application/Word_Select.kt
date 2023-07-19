@@ -10,17 +10,17 @@ class Word_Select {
         var stmt: Statement? = null
         var rs: ResultSet? = null
         var wordResult = ArrayList<WordResult>()
-        var url = "jdbc:mysql://localhost:3306/word_learning?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&enabledTLSProtocols=TLSv1.2"
+        var url = "jdbc:mysql://localhost:3306/word_learning"
         var user = "root"
         var password = "root"
 
         println("connect reid")
-        println("wordLevel : " + wordLevel)
+        println("wordLevel : $wordLevel")
 
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver")
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
             conn = DriverManager.getConnection(
                 url, user, password
             )
@@ -45,7 +45,7 @@ class Word_Select {
             }
 
         } catch (e: Exception) {
-            println(e)
+            println("Exception : $e")
         } finally {
             rs?.close()
             stmt?.close()
