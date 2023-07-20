@@ -18,24 +18,29 @@ class SecondChooseActivity : AppCompatActivity() {
         wordLearning.putExtra("wordLever", wordLevle)
         wordLearning.putExtra("screenCount", 0)
         var wordLists = arrayListOf<WordResult>()
+        wordLists.add(WordResult(11,"1","1","あ","え",0))
+        wordLists.add(WordResult(11,"2","2","か","け",0))
+        wordLists.add(WordResult(11,"3","3","な","ね",0))
+        wordLists.add(WordResult(11,"4","4","た","て",0))
+        wordLists.add(WordResult(11,"5","5","ま","め",0))
 
         //3秒選択
         time_3.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1) }!!
+            wordLists = wordLevle?.let { it1 -> selectWord(it1, wordLists) }!!
             wordLearning.putExtra("chooseTime", 3)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //5秒選択
         time_5.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1) }!!
+            wordLists = wordLevle?.let { it1 -> selectWord(it1,wordLists) }!!
             wordLearning.putExtra("chooseTime", 5)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //10秒選択
         time_10.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1) }!!
+            wordLists = wordLevle?.let { it1 -> selectWord(it1,wordLists) }!!
             wordLearning.putExtra("chooseTime", 10)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
@@ -46,7 +51,36 @@ class SecondChooseActivity : AppCompatActivity() {
         }
 
     }
-    fun selectWord (wordLevel: String): ArrayList<WordResult>{
-        return Word_Select().wordSelect(wordLevel)
+    fun selectWord (wordLevel: String, wordLists: ArrayList<WordResult>): ArrayList<WordResult>{
+        when(wordLevel){
+            "N5" -> {
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+            }
+            "N4" -> {
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+            }
+            "N3" -> {
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+            }
+            "N2" -> {
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+            }
+            "N1" -> {
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+                wordLists.add(WordResult(11,"1","1","あ","え",0))
+            }
+        }
+        return wordLists
     }
+
+
 }
