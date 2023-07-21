@@ -1,0 +1,39 @@
+{
+  "WORD_TABLE": [
+    {
+      "WORD_ID": 1,
+      "WORD_KANJI" : "単語",
+      "WORD_HURIGANA" : "たんご",
+      "WORD_HURIGANA_TEST1" : "あ",
+      "WORD_HURIGANA_TEST2" : "え"
+    },
+    {
+      "WORD_ID": 2,
+      "WORD_KANJI" : "青い",
+      "WORD_HURIGANA" : "あお-い",
+      "WORD_HURIGANA_TEST1" : "ま",
+      "WORD_HURIGANA_TEST2" : "み"
+    },
+    {
+      "WORD_ID": 3,
+      "WORD_KANJI" : "赤い",
+      "WORD_HURIGANA" : "あか-い",
+      "WORD_HURIGANA_TEST1" : "が",
+      "WORD_HURIGANA_TEST2" : "ぎ"
+    },
+    {
+      "WORD_ID": 4,
+      "WORD_KANJI" : "開ける",
+      "WORD_HURIGANA" : "あ-ける",
+      "WORD_HURIGANA_TEST1" : "が",
+      "WORD_HURIGANA_TEST2" : "ぎ"
+    },
+    {
+      "WORD_ID": 5,
+      "WORD_KANJI" : "上げる",
+      "WORD_HURIGANA" : "あ-げる",
+      "WORD_HURIGANA_TEST1" : "が",
+      "WORD_HURIGANA_TEST2" : "ぎ"
+    }
+  ]
+}

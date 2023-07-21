@@ -3,7 +3,10 @@ package com.example.word_learning_application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_second_choose.*
+import org.json.JSONObject
+import java.io.IOException
 
 
 class SecondChooseActivity : AppCompatActivity() {
@@ -18,11 +21,7 @@ class SecondChooseActivity : AppCompatActivity() {
         wordLearning.putExtra("wordLever", wordLevle)
         wordLearning.putExtra("screenCount", 0)
         var wordLists = arrayListOf<WordResult>()
-        wordLists.add(WordResult(11,"1","1","あ","え",0))
-        wordLists.add(WordResult(11,"2","2","か","け",0))
-        wordLists.add(WordResult(11,"3","3","な","ね",0))
-        wordLists.add(WordResult(11,"4","4","た","て",0))
-        wordLists.add(WordResult(11,"5","5","ま","め",0))
+
 
         //3秒選択
         time_3.setOnClickListener {
@@ -33,14 +32,14 @@ class SecondChooseActivity : AppCompatActivity() {
         }
         //5秒選択
         time_5.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1,wordLists) }!!
+            wordLists = wordLevle?.let { it1 -> selectWord(it1, wordLists) }!!
             wordLearning.putExtra("chooseTime", 5)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //10秒選択
         time_10.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1,wordLists) }!!
+            wordLists = wordLevle?.let { it1 -> selectWord(it1, wordLists) }!!
             wordLearning.putExtra("chooseTime", 10)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
@@ -51,36 +50,52 @@ class SecondChooseActivity : AppCompatActivity() {
         }
 
     }
-    fun selectWord (wordLevel: String, wordLists: ArrayList<WordResult>): ArrayList<WordResult>{
-        when(wordLevel){
-            "N5" -> {
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-            }
-            "N4" -> {
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-            }
-            "N3" -> {
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-            }
-            "N2" -> {
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-            }
-            "N1" -> {
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-                wordLists.add(WordResult(11,"1","1","あ","え",0))
-            }
-        }
-        return wordLists
+
+    fun selectWord(wordLevel: String, wordLists: ArrayList<WordResult>): ArrayList<WordResult> {
+        val jsonString = getJsonDataFromAsset(wordLevel)
+        var wordList = getResultWord(wordLists, jsonString!!)
+        Log.d("JsonWordLists ", wordLists.toString())
+        return wordList
     }
 
+    fun getJsonDataFromAsset(wordLevel: String): String? {
+        val jsonString: String
+        var jsonFile: String = ""
+        when(wordLevel){
+            "N5" -> jsonFile = "WordListN5.json"
+            "N4" -> jsonFile = "WordListN4.json"
+            "N3" -> jsonFile = "WordListN3.json"
+            "N2" -> jsonFile = "WordListN2.json"
+            "N1" -> jsonFile = "WordListN1.json"
+        }
+        try {
+            jsonString = assets.open(jsonFile)
+                .bufferedReader()
+                .use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return null
+        }
+        return jsonString
+    }
 
+    fun getResultWord(wordLists: ArrayList<WordResult>, jsonString: String): ArrayList<WordResult> {
+        val dataList = JSONObject(jsonString).getJSONArray("WORD_TABLE")
+
+        for (index in 0 until dataList.length()) {
+            val jsonObject = dataList.getJSONObject(index)
+            wordLists.add(
+                WordResult(
+                    jsonObject.getString("WORD_ID").toInt(),
+                    jsonObject.getString("WORD_KANJI"),
+                    jsonObject.getString("WORD_HURIGANA"),
+                    jsonObject.getString("WORD_HURIGANA_TEST1"),
+                    jsonObject.getString("WORD_HURIGANA_TEST2"),
+                    0
+                )
+            )
+        }
+
+        return wordLists
+    }
 }

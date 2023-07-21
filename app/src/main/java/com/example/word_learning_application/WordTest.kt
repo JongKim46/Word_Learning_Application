@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_word_learning.progressBar
 import kotlinx.android.synthetic.main.activity_word_test.*
@@ -20,6 +21,7 @@ class WordTest : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     var running = AtomicBoolean(false)
     var wordSwitch = true
+    var mWorker: Thread? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_test)
@@ -52,26 +54,26 @@ class WordTest : AppCompatActivity() {
         but3.text = randomTest[2]
 
         //thread実施
-        TimerFun(but1,but2,but3,wordLists,screenCount,wordanswer,wordLevle)
+        TimerFun(but1, but2, but3, wordLists, screenCount, wordanswer, wordLevle)
 
-        but1.setOnClickListener{
-            handler.post{
+        but1.setOnClickListener {
+            handler.post {
                 wordSwitch = false
                 btnCheck(butarray, wordanswer, but1, wordLists)
                 stopTime()
                 returnScreen(wordLevle, screenCount, wordLists)
             }
         }
-        but2.setOnClickListener{
-            handler.post{
+        but2.setOnClickListener {
+            handler.post {
                 wordSwitch = false
                 btnCheck(butarray, wordanswer, but2, wordLists)
                 stopTime()
                 returnScreen(wordLevle, screenCount, wordLists)
             }
         }
-        but3.setOnClickListener{
-            handler.post{
+        but3.setOnClickListener {
+            handler.post {
                 wordSwitch = false
                 btnCheck(butarray, wordanswer, but3, wordLists)
                 stopTime()
@@ -80,6 +82,7 @@ class WordTest : AppCompatActivity() {
         }
 
         Home.setOnClickListener {
+            mWorker?.interrupt()
             val wordLearning = Intent(this, MainActivity::class.java)
             startActivity(wordLearning)
             finish()
@@ -93,14 +96,14 @@ class WordTest : AppCompatActivity() {
         screenCount: Int,
         wordLists: ArrayList<WordResult>
     ) {
-        if(screenCount < wordLists.size-1){
+        if (screenCount < wordLists.size - 1) {
             val wordLearning = Intent(this, WordTest::class.java)
             wordLearning.putExtra("wordLever", wordLevle)
-            wordLearning.putExtra("screenCount", screenCount+1)
+            wordLearning.putExtra("screenCount", screenCount + 1)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
             finish()
-        }else{
+        } else {
             wordTestScreen(wordLevle, wordLists)
         }
     }
@@ -113,36 +116,41 @@ class WordTest : AppCompatActivity() {
         finish()
     }
 
-    fun btnCheck(butList: Array<Button>, wordanswer: String?, butChoose: Button,wordLists: ArrayList<WordResult>, ) {
+    fun btnCheck(
+        butList: Array<Button>,
+        wordanswer: String?,
+        butChoose: Button,
+        wordLists: ArrayList<WordResult>,
+    ) {
         if (wordanswer == butChoose.text) {
-            println("wordanswer : " + wordanswer)
-            wordLists.forEach{word ->
+            wordLists.forEach { word ->
                 if (word.hurigana == wordanswer) word.word_choose = 1
             }
             butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
-        }else{
-            for(but in butList){
-                if (wordanswer == but.text){
-                    but.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+        } else {
+            for (but in butList) {
+                if (wordanswer == but.text) {
+                    but.backgroundTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.yellow))
                 }
             }
             butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.Red))
         }
     }
 
-    fun noClickBtn(but1: Button, but2: Button, but3: Button, wordanswer: String?){
-        if(wordanswer == but1.text){
+    fun noClickBtn(but1: Button, but2: Button, but3: Button, wordanswer: String?) {
+        if (wordanswer == but1.text) {
             but1.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
         }
-        if(wordanswer == but2.text){
+        if (wordanswer == but2.text) {
             but2.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
         }
-        if(wordanswer == but3.text){
+        if (wordanswer == but3.text) {
             but3.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
         }
     }
 
-    fun stopTime(){
+    fun stopTime() {
         SystemClock.sleep(70)
     }
 
@@ -155,31 +163,37 @@ class WordTest : AppCompatActivity() {
         wordanswer: String?,
         wordLevle: String?,
     ) {
-        running.set(true)
-        var screenTime = 60
-        // テキストをリセット
-        thread {
-            progressBar.max = screenTime
-            var i = 0
-            while (i < screenTime) {
-                i++
-                // 60ミリ秒間待機
-                // これを設置する理由は、ないと一瞬で終わっちゃうから...
-                SystemClock.sleep(60)
-                // メインスレッドに接続してからUI処理
-                handler.post {
-                    // progressで現在の進捗率を更新
-                    progressBar.progress = i
+
+        mWorker = Thread {
+            try {
+                running.set(true)
+                var screenTime = 60
+                progressBar.max = screenTime
+                var i = 0
+                while (i < screenTime) {
+                    i++
+                    // 60ミリ秒間待機
+                    // これを設置する理由は、ないと一瞬で終わっちゃうから...
+                    SystemClock.sleep(60)
+                    Thread.sleep(2L)
+                    // メインスレッドに接続してからUI処理
+                    handler.post {
+                        // progressで現在の進捗率を更新
+                        progressBar.progress = i
+                    }
                 }
-            }
                 if (wordSwitch) {
                     handler.post {
-                        println("screenCount : " + screenCount)
                         noClickBtn(but1, but2, but3, wordanswer)
                         SystemClock.sleep(60)
                         returnScreen(wordLevle, screenCount, wordLists)
                     }
                 }
+            } catch (ex: InterruptedException) {
+                Thread.currentThread().interrupt()
+                Log.d("InterruptedException", ex.toString())
             }
         }
-    }//thread
+        mWorker?.start()
+    }
+}//thread
