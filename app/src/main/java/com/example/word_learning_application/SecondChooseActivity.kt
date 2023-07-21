@@ -13,12 +13,15 @@ class SecondChooseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_choose)
-        //学習LEVEL
+        /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
+        /*タイトル設定*/
         wordTitle.text = wordLevle + "単語学習時間選択"
 
         val wordLearning = Intent(this, WordLearning::class.java)
+        /*選択した学習レベル取得*/
         wordLearning.putExtra("wordLever", wordLevle)
+        /*何番目の学習画面なのか取得*/
         wordLearning.putExtra("screenCount", 0)
         var wordLists = arrayListOf<WordResult>()
 
@@ -52,13 +55,16 @@ class SecondChooseActivity : AppCompatActivity() {
     }
 
     fun selectWord(wordLevel: String, wordLists: ArrayList<WordResult>): ArrayList<WordResult> {
+        /*Jsonファイル取得*/
         val jsonString = getJsonDataFromAsset(wordLevel)
+        /*取得したJsonファイルをList化*/
         var wordList = getResultWord(wordLists, jsonString!!)
         Log.d("JsonWordLists ", wordLists.toString())
         return wordList
     }
 
     fun getJsonDataFromAsset(wordLevel: String): String? {
+        /*Jsonファイル取得*/
         val jsonString: String
         var jsonFile: String = ""
         when(wordLevel){
@@ -80,13 +86,14 @@ class SecondChooseActivity : AppCompatActivity() {
     }
 
     fun getResultWord(wordLists: ArrayList<WordResult>, jsonString: String): ArrayList<WordResult> {
+        /*取得したJsonファイルをList化*/
         val dataList = JSONObject(jsonString).getJSONArray("WORD_TABLE")
 
         for (index in 0 until dataList.length()) {
             val jsonObject = dataList.getJSONObject(index)
             wordLists.add(
                 WordResult(
-                    jsonObject.getString("WORD_ID").toInt(),
+                    jsonObject.getInt("WORD_ID"),
                     jsonObject.getString("WORD_KANJI"),
                     jsonObject.getString("WORD_HURIGANA"),
                     jsonObject.getString("WORD_HURIGANA_TEST1"),

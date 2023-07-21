@@ -11,7 +11,6 @@ class TestResults : AppCompatActivity() {
         setContentView(R.layout.activity_test_results)
 
         var wordLevle = intent.getStringExtra("wordLever")
-        var screenCount: Int? = intent?.getIntExtra("screenCount", 0)?.toInt()
         var wordLists = intent?.getSerializableExtra("wordLists") as ArrayList<WordResult>
 
 
