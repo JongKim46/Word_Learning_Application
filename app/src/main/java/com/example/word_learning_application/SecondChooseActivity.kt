@@ -13,6 +13,9 @@ class SecondChooseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_choose)
+        /*DB成城*/
+        var dbHelper = LocalDBHelper(this, "WordList.db",null,1)
+
         /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
         /*タイトル設定*/
@@ -25,10 +28,12 @@ class SecondChooseActivity : AppCompatActivity() {
         wordLearning.putExtra("screenCount", 0)
         var wordLists = arrayListOf<WordResult>()
 
+        var database = dbHelper.writableDatabase
 
         //3秒選択
         time_3.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1, wordLists) }!!
+            wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
+            //wordLists = selectWord(wordLevle!!, wordLists)
             wordLearning.putExtra("chooseTime", 3)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
@@ -55,6 +60,8 @@ class SecondChooseActivity : AppCompatActivity() {
     }
 
     fun selectWord(wordLevel: String, wordLists: ArrayList<WordResult>): ArrayList<WordResult> {
+       var wordSelectList = WordSelect().selectWord(wordLevel)
+
         /*Jsonファイル取得*/
         val jsonString = getJsonDataFromAsset(wordLevel)
         /*取得したJsonファイルをList化*/
