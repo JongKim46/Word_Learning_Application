@@ -49,6 +49,7 @@ class WordLearning : AppCompatActivity() {
         Home.setOnClickListener {
             mWorker?.interrupt()
             val wordLearning = Intent(this, MainActivity::class.java)
+            wordLearning.putExtra("DBcheck", false)
             startActivity(wordLearning)
             finish()
         }

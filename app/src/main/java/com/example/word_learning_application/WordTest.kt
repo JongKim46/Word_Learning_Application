@@ -84,6 +84,7 @@ class WordTest : AppCompatActivity() {
         Home.setOnClickListener {
             mWorker?.interrupt()
             val wordLearning = Intent(this, MainActivity::class.java)
+            wordLearning.putExtra("DBcheck", false)
             startActivity(wordLearning)
             finish()
         }
@@ -152,6 +153,7 @@ class WordTest : AppCompatActivity() {
 
     fun stopTime() {
         SystemClock.sleep(70)
+        mWorker?.interrupt()
     }
 
     fun TimerFun(

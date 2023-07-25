@@ -3,6 +3,11 @@ package com.example.word_learning_application
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import java.nio.charset.Charset
+import java.nio.file.Files
+import java.nio.file.Paths
+
 
 class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.CursorFactory?,version: Int)
     : SQLiteOpenHelper(context,name,factory,version) {
@@ -21,32 +26,40 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
                 "WORD_HURIGANA_TEST1 VARCHAR(15), " +
                 "WORD_HURIGANA_TEST2 VARCHAR(15)) "
         db?.execSQL(sql)
+        Log.d("TABLE WORD", "TABLE WORD作成完了")
+        delete(db!!)
+
+
     }
+
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
     }
 
-    fun insert(db: SQLiteDatabase,txt:String){
-        var sql = " INSERT INTO MYTABLE(TXT) " +
-                " VALUES('${txt}')"
-
-        db.execSQL(sql)
+    fun insert(db: SQLiteDatabase, wordSQL: ArrayList<String>){
+        try {
+            for (sql in wordSQL){
+                db.execSQL(sql)
+            }
+            Log.d("TABLE WORD", "TABLE Insert完了")
+        }catch (e: Exception){
+            Log.d("TABLE WORD", "TABLE Insert失敗")
+        }
 
     }
 
     fun select(db: SQLiteDatabase, wordLevle: String, wordLists: ArrayList<WordResult>) : ArrayList<WordResult>?{
         var levelSql = ""
         when(wordLevle){
-            "N5" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N5 = 1 ORDER BY RAND() LIMIT 10"
-            "N4" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N4 = 1 ORDER BY RAND() LIMIT 10"
-            "N3" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N3 = 1 ORDER BY RAND() LIMIT 10"
-            "N2" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N2 = 1 ORDER BY RAND() LIMIT 10"
-            "N1" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N1 = 1 ORDER BY RAND() LIMIT 10"
+            "N5" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N5 = 1 ORDER BY RANDOM() LIMIT 10"
+            "N4" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N4 = 1 ORDER BY RANDOM() LIMIT 10"
+            "N3" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N3 = 1 ORDER BY RANDOM() LIMIT 10"
+            "N2" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N2 = 1 ORDER BY RANDOM() LIMIT 10"
+            "N1" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N1 = 1 ORDER BY RANDOM() LIMIT 10"
         }
 
         var rs = db.rawQuery(levelSql, null)
-
         while (rs.moveToNext()){
             wordLists.add(
                 WordResult(
@@ -59,12 +72,21 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
                 )
             )
         }
-
+        Log.d("select wordLists", wordLists.toString())
         return wordLists
     }
 
-    fun delete(db:SQLiteDatabase,txt:String){
+    fun delete(db:SQLiteDatabase){
+        val sql = "DELETE FROM WORD_TABLE"
+        db.execSQL(sql)
+        Log.d("TABLE WORD", "TABLE WORDデータ削除完了")
+        onUpgrade(db!!)
+    }
 
+    private fun onUpgrade(db: SQLiteDatabase) {
+        val sql = "UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'WORD_TABLE'"
+        db.execSQL(sql)
+        Log.d("TABLE WORD", "AutoIncrement初期化完了")
     }
 
 

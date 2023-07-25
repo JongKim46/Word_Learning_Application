@@ -14,7 +14,7 @@ class SecondChooseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_choose)
         /*DB成城*/
-        var dbHelper = LocalDBHelper(this, "WordList.db",null,1)
+        var dbHelper = LocalDBHelper(this, "WordTable.db",null,1)
 
         /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
@@ -40,20 +40,23 @@ class SecondChooseActivity : AppCompatActivity() {
         }
         //5秒選択
         time_5.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1, wordLists) }!!
+            wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             wordLearning.putExtra("chooseTime", 5)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //10秒選択
         time_10.setOnClickListener {
-            wordLists = wordLevle?.let { it1 -> selectWord(it1, wordLists) }!!
+            wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             wordLearning.putExtra("chooseTime", 10)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
 
         cancel_button.setOnClickListener {
+            val wordLearning = Intent(this, MainActivity::class.java)
+            wordLearning.putExtra("DBcheck", false)
+            startActivity(wordLearning)
             finish()
         }
 
