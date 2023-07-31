@@ -1,20 +1,21 @@
 package com.example.word_learning_application
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class WordResult(
     /*単語ID*/
-    var word_id: Int,
+    @SerializedName("word_id")var word_id: Int,
     /*単語漢字*/
-    var word_kanji: String,
+    @SerializedName("word_kanji")var word_kanji: String,
     /*単語ふりがな*/
-    var hurigana: String,
-   /* テストふりがな1*/
-    var Test1: String,
+    @SerializedName("word_hurigana")var hurigana: String,
+    /* テストふりがな1*/
+    @SerializedName("word_hurigana_test1")var Test1: String,
     /*テストふりがな2*/
-    var Test2: String,
+    @SerializedName("word_hurigana_test2")var Test2: String,
     /*テスト中に選択した回答に対する判断*/
     var word_choose: Int,
 ) : Parcelable

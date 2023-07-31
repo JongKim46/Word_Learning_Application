@@ -4,18 +4,25 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.Http.word_learning_application.HttpSpringHelp
+import com.Http.word_learning_application.SelectWordListAPI
+import com.Http.word_learning_application.WordAPI
 import kotlinx.android.synthetic.main.activity_second_choose.*
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
 
 
 class SecondChooseActivity : AppCompatActivity() {
+    var wordSelectLists = ArrayList<WordResult>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_choose)
         /*DB成城*/
-        var dbHelper = LocalDBHelper(this, "WordTable.db",null,1)
-
+        //var dbHelper = LocalDBHelper(this, "WordTable.db",null,1)
+        var dbHelper = HttpSpringHelp.getRetrofit().create(WordAPI::class.java)
         /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
         /*タイトル設定*/
@@ -26,28 +33,29 @@ class SecondChooseActivity : AppCompatActivity() {
         wordLearning.putExtra("wordLever", wordLevle)
         /*何番目の学習画面なのか取得*/
         wordLearning.putExtra("screenCount", 0)
-        var wordLists = arrayListOf<WordResult>()
+        var wordLists = ArrayList<WordResult>()
 
-        var database = dbHelper.writableDatabase
 
         //3秒選択
         time_3.setOnClickListener {
-            wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
+            wordLists = SelectWordListAPI().wordSelect(wordLevle!!)
+            Log.d("return Jsonbody", wordSelectLists.toString())
+            //wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             //wordLists = selectWord(wordLevle!!, wordLists)
-            wordLearning.putExtra("chooseTime", 3)
-            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
-            startActivity(wordLearning)
+            //wordLearning.putExtra("chooseTime", 3)
+            //wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
+            //startActivity(wordLearning)
         }
         //5秒選択
         time_5.setOnClickListener {
-            wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
+            //wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             wordLearning.putExtra("chooseTime", 5)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //10秒選択
         time_10.setOnClickListener {
-            wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
+            //wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             wordLearning.putExtra("chooseTime", 10)
             wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
