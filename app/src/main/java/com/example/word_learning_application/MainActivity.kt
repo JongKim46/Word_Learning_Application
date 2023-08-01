@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.Http.word_learning_application.SelectWordListAPI
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val secondScreen = Intent(this, SecondChooseActivity::class.java)
 
+        /*
         var DBcheck = intent?.getBooleanExtra("DBcheck", true)
 
         //LocalDB TABLE名設定
@@ -29,9 +29,10 @@ class MainActivity : AppCompatActivity() {
             dbHelper.onCreate(database)
             dbHelper.insert(database, wordSQL)
         }
+*/
 
         N5_button.setOnClickListener {
-            val wordLever = "N1"
+            val wordLever = "N5"
             secondScreen.putExtra("wordLever", wordLever)
             startActivity(secondScreen)
         }

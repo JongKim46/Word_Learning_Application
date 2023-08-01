@@ -3,26 +3,21 @@ package com.example.word_learning_application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.Http.word_learning_application.HttpSpringHelp
 import com.Http.word_learning_application.SelectWordListAPI
 import com.Http.word_learning_application.WordAPI
 import kotlinx.android.synthetic.main.activity_second_choose.*
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
+
 
 
 class SecondChooseActivity : AppCompatActivity() {
-    var wordSelectLists = ArrayList<WordResult>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_choose)
-        /*DB成城*/
-        //var dbHelper = LocalDBHelper(this, "WordTable.db",null,1)
-        var dbHelper = HttpSpringHelp.getRetrofit().create(WordAPI::class.java)
         /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
         /*タイトル設定*/
@@ -33,18 +28,16 @@ class SecondChooseActivity : AppCompatActivity() {
         wordLearning.putExtra("wordLever", wordLevle)
         /*何番目の学習画面なのか取得*/
         wordLearning.putExtra("screenCount", 0)
-        var wordLists = ArrayList<WordResult>()
 
+        /*DB成城*/
+        val wordLists = SelectWordListAPI().wordSelectThread(wordLevle!!)
 
         //3秒選択
         time_3.setOnClickListener {
-            wordLists = SelectWordListAPI().wordSelect(wordLevle!!)
-            Log.d("return Jsonbody", wordSelectLists.toString())
-            //wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
-            //wordLists = selectWord(wordLevle!!, wordLists)
-            //wordLearning.putExtra("chooseTime", 3)
-            //wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
-            //startActivity(wordLearning)
+            Log.d("wordSelectList", wordLists.toString())
+            wordLearning.putExtra("chooseTime", 3)
+            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
+            startActivity(wordLearning)
         }
         //5秒選択
         time_5.setOnClickListener {
@@ -68,59 +61,5 @@ class SecondChooseActivity : AppCompatActivity() {
             finish()
         }
 
-    }
-
-    fun selectWord(wordLevel: String, wordLists: ArrayList<WordResult>): ArrayList<WordResult> {
-       var wordSelectList = WordSelect().selectWord(wordLevel)
-
-        /*Jsonファイル取得*/
-        val jsonString = getJsonDataFromAsset(wordLevel)
-        /*取得したJsonファイルをList化*/
-        var wordList = getResultWord(wordLists, jsonString!!)
-        Log.d("JsonWordLists ", wordLists.toString())
-        return wordList
-    }
-
-    fun getJsonDataFromAsset(wordLevel: String): String? {
-        /*Jsonファイル取得*/
-        val jsonString: String
-        var jsonFile: String = ""
-        when(wordLevel){
-            "N5" -> jsonFile = "WordListN5.json"
-            "N4" -> jsonFile = "WordListN4.json"
-            "N3" -> jsonFile = "WordListN3.json"
-            "N2" -> jsonFile = "WordListN2.json"
-            "N1" -> jsonFile = "WordListN1.json"
-        }
-        try {
-            jsonString = assets.open(jsonFile)
-                .bufferedReader()
-                .use { it.readText() }
-        } catch (ioException: IOException) {
-            ioException.printStackTrace()
-            return null
-        }
-        return jsonString
-    }
-
-    fun getResultWord(wordLists: ArrayList<WordResult>, jsonString: String): ArrayList<WordResult> {
-        /*取得したJsonファイルをList化*/
-        val dataList = JSONObject(jsonString).getJSONArray("WORD_TABLE")
-
-        for (index in 0 until dataList.length()) {
-            val jsonObject = dataList.getJSONObject(index)
-            wordLists.add(
-                WordResult(
-                    jsonObject.getInt("WORD_ID"),
-                    jsonObject.getString("WORD_KANJI"),
-                    jsonObject.getString("WORD_HURIGANA"),
-                    jsonObject.getString("WORD_HURIGANA_TEST1"),
-                    jsonObject.getString("WORD_HURIGANA_TEST2"),
-                    0
-                )
-            )
-        }
-
-        return wordLists
     }
 }
