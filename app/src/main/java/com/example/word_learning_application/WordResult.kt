@@ -18,10 +18,16 @@ data class WordResult(
     @SerializedName("word_hurigana_test2")var Test2: String,
     /*テスト中に選択した回答に対する判断*/
     var word_choose: Int,
+    /*英語*/
+    @SerializedName("word_english")var word_english: String,
+    /*韓国語*/
+    @SerializedName("word_korea")var word_korea: String,
+
 ) : Parcelable
 {
     override fun toString(): String {
         return "word_id:$word_id, word_kanji:$word_kanji, hurigana:$hurigana," +
-                " Test1:$Test1, Test2:$Test2, word_choose:$word_choose"
+                " Test1:$Test1, Test2:$Test2, word_choose:$word_choose"+
+                "word_english:$word_english, word_korea:$word_korea"
     }
 }

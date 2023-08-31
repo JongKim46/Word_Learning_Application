@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import kotlin.concurrent.thread
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_word_learning.*
 
 
@@ -15,9 +17,17 @@ val handler = Handler(Looper.getMainLooper())
 
 class WordLearning : AppCompatActivity() {
     var mWorker: Thread? = null
+    lateinit var mAdView : AdView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_learning)
+        //AD
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.ad_view)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+
         /*選択した学習レベル取得*/
         var wordLevle = intent?.getStringExtra("wordLever")
         /*選択した学習時間取得*/

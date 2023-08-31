@@ -5,91 +5,128 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".WordLearning">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="top"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/Home"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="@string/Home"
-            tools:layout_editor_absoluteX="dp"
-            tools:layout_editor_absoluteY="10dp" />
+        android:orientation="vertical"
+        android:weightSum="1"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:id="@+id/wordTitle"
-            android:layout_width="410dp"
-            android:layout_height="30dp"
-            android:text="@string/word_Test"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/wordTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:text="@string/word_Main"
+                android:textColor="@color/white"
+                android:background="@color/Orange"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="100dp" />
+
+            <Button
+                android:id="@+id/Home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                app:icon="@android:drawable/stat_notify_more"
+                app:iconSize="40dp"
+                app:iconTint="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wordADMain"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
             android:gravity="center"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="100dp" />
+            android:orientation="vertical">
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="310dp"
+                android:layout_height="40dp"
+                android:max="30"
+                android:progress="0"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="297dp" />
+
+            <TextView
+                android:id="@+id/TestKanji"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:text="TextView"
+                android:gravity="center"
+                android:textSize="25sp"
+                tools:layout_editor_absoluteX="145dp"
+                tools:layout_editor_absoluteY="126dp" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#C5A59D"
+                android:text="Button"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#C5A59D"
+                android:text="Button"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#C5A59D"
+                android:text="Button"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/wordCount"
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="TextView"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteX="145dp"
+                tools:layout_editor_absoluteY="256dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:orientation="vertical" >
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/ad_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:id="@+id/word_screen"
-        android:orientation="vertical">
 
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="310dp"
-            android:layout_height="40dp"
-            android:max="30"
-            android:progress="0"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="297dp" />
-
-        <TextView
-            android:id="@+id/TestKanji"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:text="TextView"
-            android:gravity="center"
-            android:textSize="25sp"
-            tools:layout_editor_absoluteX="145dp"
-            tools:layout_editor_absoluteY="126dp" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#C5A59D"
-            android:text="Button"
-            android:textColor="@color/black" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#C5A59D"
-            android:text="Button"
-            android:textColor="@color/black" />
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#C5A59D"
-            android:text="Button"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/wordCount"
-            android:layout_width="120dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="TextView"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="145dp"
-            tools:layout_editor_absoluteY="256dp" />
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

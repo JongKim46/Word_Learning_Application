@@ -1,35 +1,28 @@
 package com.example.word_learning_application
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import io.socket.client.Socket
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
+import kotlinx.android.synthetic.main.activity_main.N1_button
+import kotlinx.android.synthetic.main.activity_main.N2_button
+import kotlinx.android.synthetic.main.activity_main.N3_button
+import kotlinx.android.synthetic.main.activity_main.N4_button
+import kotlinx.android.synthetic.main.activity_main.N5_button
 
+
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mSocket: Socket
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val secondScreen = Intent(this, SecondChooseActivity::class.java)
 
-        /*
-        var DBcheck = intent?.getBooleanExtra("DBcheck", true)
+        MobileAds.initialize(this) {}
 
-        //LocalDB TABLE名設定
-        if (DBcheck!!) {
-            var wordSQL = readSQL()
-            var dbHelper = LocalDBHelper(this, "WordTable.db", null, 1)
-            var database = dbHelper.writableDatabase
-            dbHelper.onCreate(database)
-            dbHelper.insert(database, wordSQL)
-        }
-*/
 
         N5_button.setOnClickListener {
             val wordLever = "N5"
@@ -58,16 +51,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun readSQL(): ArrayList<String> {
-        var wordSQl = resources.openRawResource(R.raw.wordsql)
 
-        var str = ArrayList<String>()
-        val sb = BufferedReader(InputStreamReader(wordSQl, "UTF-8"))
-        while (true) {
-            val line = sb.readLine() ?: break
-            str.add(line)
-        }
-        return str
-    }
 }
 

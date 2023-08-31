@@ -21,15 +21,15 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
                 "WORD_LEVEL_N3 INT(1), " +
                 "WORD_LEVEL_N4 INT(1), " +
                 "WORD_LEVEL_N5 INT(1), " +
-                "WORD_KANJI VARCHAR(10), " +
-                "WORD_HURIGANA VARCHAR(15), " +
-                "WORD_HURIGANA_TEST1 VARCHAR(15), " +
-                "WORD_HURIGANA_TEST2 VARCHAR(15)) "
+                "WORD_KANJI VARCHAR(100), " +
+                "WORD_HURIGANA VARCHAR(100), " +
+                "WORD_HURIGANA_TEST1 VARCHAR(100), " +
+                "WORD_HURIGANA_TEST2 VARCHAR(100), " +
+                "WORD_ENGLISH VARCHAR(100), " +
+                "WORD_KOREA VARCHAR(100)) "
         db?.execSQL(sql)
         Log.d("TABLE WORD", "TABLE WORD作成完了")
         delete(db!!)
-
-
     }
 
 
@@ -68,7 +68,9 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
                     rs.getString(rs.getColumnIndex("WORD_HURIGANA")),
                     rs.getString(rs.getColumnIndex("WORD_HURIGANA_TEST1")),
                     rs.getString(rs.getColumnIndex("WORD_HURIGANA_TEST2")),
-                    0
+                    0,
+                    rs.getString(rs.getColumnIndex("word_english")),
+                    rs.getString(rs.getColumnIndex("word_korea"))
                 )
             )
         }

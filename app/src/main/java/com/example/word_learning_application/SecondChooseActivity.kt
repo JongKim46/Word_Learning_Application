@@ -9,15 +9,30 @@ import android.util.Log
 import com.Http.word_learning_application.HttpSpringHelp
 import com.Http.word_learning_application.SelectWordListAPI
 import com.Http.word_learning_application.WordAPI
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_second_choose.*
 import org.json.JSONObject
 
 
 
 class SecondChooseActivity : AppCompatActivity() {
+
+    lateinit var mAdView : AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_choose)
+
+        //AD
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.ad_view)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+
+
         /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
         /*タイトル設定*/

@@ -12,9 +12,10 @@ import android.widget.Button
 import kotlinx.android.synthetic.main.activity_word_learning.progressBar
 import kotlinx.android.synthetic.main.activity_word_test.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.concurrent.thread
-import kotlin.streams.toList
 
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 class WordTest : AppCompatActivity() {
     // UI処理をするためにHandlerクラス生成
@@ -22,9 +23,19 @@ class WordTest : AppCompatActivity() {
     var running = AtomicBoolean(false)
     var wordSwitch = true
     var mWorker: Thread? = null
+
+    lateinit var mAdView : AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_test)
+
+        //AD
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.ad_view)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         var wordLevle = intent.getStringExtra("wordLever")
         var screenCount: Int? = intent?.getIntExtra("screenCount", 0)?.toInt()
@@ -127,27 +138,27 @@ class WordTest : AppCompatActivity() {
             wordLists.forEach { word ->
                 if (word.hurigana == wordanswer) word.word_choose = 1
             }
-            butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
+            butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green, theme))
         } else {
             for (but in butList) {
                 if (wordanswer == but.text) {
                     but.backgroundTintList =
-                        ColorStateList.valueOf(resources.getColor(R.color.yellow))
+                        ColorStateList.valueOf(resources.getColor(R.color.yellow, theme))
                 }
             }
-            butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.Red))
+            butChoose.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.Red, theme))
         }
     }
 
     fun noClickBtn(but1: Button, but2: Button, but3: Button, wordanswer: String?) {
         if (wordanswer == but1.text) {
-            but1.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+            but1.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow, theme))
         }
         if (wordanswer == but2.text) {
-            but2.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+            but2.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow, theme))
         }
         if (wordanswer == but3.text) {
-            but3.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow))
+            but3.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.yellow, theme))
         }
     }
 
