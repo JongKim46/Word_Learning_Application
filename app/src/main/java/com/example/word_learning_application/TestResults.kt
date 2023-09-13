@@ -31,7 +31,6 @@ class TestResults : AppCompatActivity() {
             var wordList = WordResultList(this, wordLists, wordLanguage)
             wordTestResultList.adapter = wordList
 
-
         Home.setOnClickListener {
             val wordLearning = Intent(this, MainActivity::class.java)
             wordLearning.putExtra("DBcheck", false)

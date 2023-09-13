@@ -33,14 +33,6 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="100dp" />
 
-            <Button
-                android:id="@+id/Home"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                app:icon="@android:drawable/stat_notify_more"
-                app:iconSize="40dp"
-                app:iconTint="@color/white" />
 
         </LinearLayout>
 

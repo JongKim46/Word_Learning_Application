@@ -10,7 +10,10 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_word_learning.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 
 
 // UI処理をするためにHandlerクラス生成
@@ -42,20 +45,24 @@ class WordLearning : AppCompatActivity() {
         /*学習言語*/
         val wordLanguage = intent.getStringExtra("language")
 
-        //漢字、ひらがな表示
-        kanjiView.text = wordLists[screenCount!!]?.word_kanji
-        hiraganaView.text = wordLists[screenCount!!]?.hurigana
-
         /*タイトル設定*/
         wordTitle.text = "$wordLevle 単語学習"
         /*取得した全データと学習の順番を表示*/
-        wordCount.text = "${screenCount + 1} /${wordLists.size}"
+        wordCount.text = "${screenCount!! + 1} /${wordLists.size}"
+
+
+        //漢字、ひらがな表示
+        kanjiView.text = wordLists[screenCount!!]?.word_kanji
+        hiraganaView.text = wordLists[screenCount!!]?.hurigana
 
         if(wordLanguage!! == "kr"){
             wordMeaning.text = wordLists[screenCount!!]?.word_korea
         }else{
             wordMeaning.text = wordLists[screenCount!!]?.word_english
         }
+
+
+
 
         //progressBar設定
         if (screenCount != null) {
@@ -119,6 +126,8 @@ class WordLearning : AppCompatActivity() {
         }
         mWorker?.start()
     }
+
+
 
     /*単語学習画面を表示*/
     fun returnScreen(
