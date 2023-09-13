@@ -46,7 +46,7 @@ class Loading_Screen : AppCompatActivity() {
                     }
                     Log.d("TABLE WORD _wordSqlList", "$wordSql")
                     var wordSQL = readSQL(wordSql)
-                    var success = dbHelper.insert(database, wordSQL)
+                    dbHelper.insert(database, wordSQL)
                 }
                 handler.post{
                     startActivity(Intent(this, SelectLanguage::class.java))

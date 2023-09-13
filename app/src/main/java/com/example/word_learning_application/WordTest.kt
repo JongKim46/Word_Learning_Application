@@ -100,6 +100,7 @@ class WordTest : AppCompatActivity() {
             mWorker?.interrupt()
             val wordLearning = Intent(this, MainActivity::class.java)
             wordLearning.putExtra("DBcheck", false)
+            wordLearning.putExtra("language", wordLanguage)
             startActivity(wordLearning)
             finish()
         }
