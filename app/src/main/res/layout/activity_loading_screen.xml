@@ -10,10 +10,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/Red"
+        android:gravity="center"
+        android:background="@color/Orange"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
 
+
+        <TextView
+            android:id="@+id/textView"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:layout_margin="30dp"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/word_Main" />
+
+        <TextView
+            android:id="@+id/countView"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(0/4)" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_height="30dp"
+            android:layout_width="250dp"
+            android:indeterminateTint="@color/Red"
+            />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

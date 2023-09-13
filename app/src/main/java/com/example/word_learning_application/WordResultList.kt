@@ -1,7 +1,6 @@
 package com.example.word_learning_application
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,11 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 
 
-class WordResultList(val context: Context, val wordLists: ArrayList<WordResult>): BaseAdapter() {
+class WordResultList(
+    val context: Context,
+    val wordLists: ArrayList<WordResult>,
+    val wordLanguage: String?
+): BaseAdapter() {
 
     override fun getCount(): Int {
         return wordLists.size
@@ -31,7 +34,8 @@ class WordResultList(val context: Context, val wordLists: ArrayList<WordResult>)
         /*上で生成されたviewをword_test_item.xmlファイルの各Viewと連結する過程だ。*/
         val wordKanji = view.findViewById<TextView>(R.id.wordKanji)
         val wordHiraganar = view.findViewById<TextView>(R.id.wordHiraganar)
-        val bookmarck = view.findViewById<TextView>(R.id.bookmarck)
+        val wordMeaning = view.findViewById<TextView>(R.id.wordMeaning)
+        val bookmarck = view.findViewById<TextView>(R.id.wordMeaning)
 
         /*試験結果の判断及びカラー表示*/
         val word = wordLists[position]
@@ -46,6 +50,11 @@ class WordResultList(val context: Context, val wordLists: ArrayList<WordResult>)
         }
         wordKanji.text = word.word_kanji
         wordHiraganar.text = word.hurigana
+        if(wordLanguage == "kr"){
+            wordMeaning.text = word.word_korea
+        }else{
+            wordMeaning.text = word.word_english
+        }
         return view
     }
 

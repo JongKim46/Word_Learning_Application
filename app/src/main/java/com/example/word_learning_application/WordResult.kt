@@ -7,21 +7,21 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class WordResult(
     /*単語ID*/
-    @SerializedName("word_id")var word_id: Int,
+    @SerializedName("WORD_ID")var word_id: Int,
     /*単語漢字*/
-    @SerializedName("word_kanji")var word_kanji: String,
+    @SerializedName("WORD_KANJI")var word_kanji: String,
     /*単語ふりがな*/
-    @SerializedName("word_hurigana")var hurigana: String,
+    @SerializedName("WORD_HURIGANA")var hurigana: String,
     /* テストふりがな1*/
-    @SerializedName("word_hurigana_test1")var Test1: String,
+    @SerializedName("WORD_HURIGANA_TEST1")var Test1: String,
     /*テストふりがな2*/
-    @SerializedName("word_hurigana_test2")var Test2: String,
+    @SerializedName("WORD_HURIGANA_TEST2")var Test2: String,
     /*テスト中に選択した回答に対する判断*/
     var word_choose: Int,
     /*英語*/
-    @SerializedName("word_english")var word_english: String,
+    @SerializedName("WORD_ENGLISH")var word_english: String,
     /*韓国語*/
-    @SerializedName("word_korea")var word_korea: String,
+    @SerializedName("WORD_KOREA")var word_korea: String,
 
 ) : Parcelable
 {

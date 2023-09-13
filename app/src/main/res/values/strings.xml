@@ -15,4 +15,9 @@
     <string name="word_Test">単語学習TEST</string>
     <string name="test_Results">TEST結果</string>
     <string name="word_Main">JLPT 単語学習</string>
+
+    <string name="word_English">English</string>
+    <string name="word_Korean">한국어</string>
+
+
 </resources>

@@ -26,7 +26,9 @@ class SelectWordListAPI {
                             body.hurigana,
                             body.Test1,
                             body.Test2,
-                            0
+                            0,
+                            body.word_english,
+                            body.word_korea
                         )
                     )
                 }
@@ -55,7 +57,10 @@ class SelectWordListAPI {
                                 body.hurigana,
                                 body.Test1,
                                 body.Test2,
-                                0
+                                0,
+                                body.word_english,
+                                body.word_korea
+
                             )
                         )
                     }

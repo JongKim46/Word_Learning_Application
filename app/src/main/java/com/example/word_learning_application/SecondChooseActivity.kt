@@ -3,18 +3,10 @@ package com.example.word_learning_application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import com.Http.word_learning_application.HttpSpringHelp
-import com.Http.word_learning_application.SelectWordListAPI
-import com.Http.word_learning_application.WordAPI
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_second_choose.*
-import org.json.JSONObject
-
 
 
 class SecondChooseActivity : AppCompatActivity() {
@@ -35,37 +27,41 @@ class SecondChooseActivity : AppCompatActivity() {
 
         /*学習Level*/
         val wordLevle = intent.getStringExtra("wordLever")
+        /*学習言語*/
+        val wordLanguage = intent.getStringExtra("language")
+
         /*タイトル設定*/
-        wordTitle.text = wordLevle + "単語学習時間選択"
+        wordMainTitle.text = wordLevle + "単語学習時間選択"
 
         val wordLearning = Intent(this, WordLearning::class.java)
         /*選択した学習レベル取得*/
         wordLearning.putExtra("wordLever", wordLevle)
         /*何番目の学習画面なのか取得*/
         wordLearning.putExtra("screenCount", 0)
+        /*学習言語*/
+        wordLearning.putExtra("language", wordLanguage)
+        var wordLists = arrayListOf<WordResult>()
 
         /*DB成城*/
-        val wordLists = SelectWordListAPI().wordSelectThread(wordLevle!!)
+        //val wordLists = SelectWordListAPI().wordSelectThread(wordLevle!!)
+        var dbHelper = LocalDBHelper(this, "WordTable.db",null,1)
+        var database = dbHelper.writableDatabase
+        wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
+        wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
 
         //3秒選択
         time_3.setOnClickListener {
-            Log.d("wordSelectList", wordLists.toString())
             wordLearning.putExtra("chooseTime", 3)
-            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //5秒選択
         time_5.setOnClickListener {
-            //wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             wordLearning.putExtra("chooseTime", 5)
-            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
         //10秒選択
         time_10.setOnClickListener {
-            //wordLists = dbHelper.select(database, wordLevle!!, wordLists)!!
             wordLearning.putExtra("chooseTime", 10)
-            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
             startActivity(wordLearning)
         }
 
@@ -77,4 +73,5 @@ class SecondChooseActivity : AppCompatActivity() {
         }
 
     }
+
 }

@@ -10,6 +10,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_word_learning.*
+import kotlinx.coroutines.runBlocking
 
 
 // UI処理をするためにHandlerクラス生成
@@ -18,6 +19,7 @@ val handler = Handler(Looper.getMainLooper())
 class WordLearning : AppCompatActivity() {
     var mWorker: Thread? = null
     lateinit var mAdView : AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_learning)
@@ -37,6 +39,9 @@ class WordLearning : AppCompatActivity() {
         /*Jsonで取得したデータ*/
         var wordLists = intent?.getSerializableExtra("wordLists") as ArrayList<WordResult>
 
+        /*学習言語*/
+        val wordLanguage = intent.getStringExtra("language")
+
         //漢字、ひらがな表示
         kanjiView.text = wordLists[screenCount!!]?.word_kanji
         hiraganaView.text = wordLists[screenCount!!]?.hurigana
@@ -46,12 +51,17 @@ class WordLearning : AppCompatActivity() {
         /*取得した全データと学習の順番を表示*/
         wordCount.text = "${screenCount + 1} /${wordLists.size}"
 
+        if(wordLanguage!! == "kr"){
+            wordMeaning.text = wordLists[screenCount!!]?.word_korea
+        }else{
+            wordMeaning.text = wordLists[screenCount!!]?.word_english
+        }
 
         //progressBar設定
         if (screenCount != null) {
             if (chooseTime != null) {
                 screenCount++
-                TimerFun(wordLevle, chooseTime, screenCount, wordLists)
+                TimerFun(wordLevle, chooseTime, screenCount, wordLists,wordLanguage)
             }
         }
 
@@ -69,13 +79,15 @@ class WordLearning : AppCompatActivity() {
         wordLevle: String?,
         chooseTime: Int,
         screenCount: Int,
-        wordLists: ArrayList<WordResult>
+        wordLists: ArrayList<WordResult>,
+        wordLanguage: String?
     ) {
 
         mWorker = Thread {
             try {
                 var screenTime = (chooseTime + 1) * 10
                 progressBar.max = screenTime
+                progressBar.progress = 0
                 var i = 0
                 while (i < screenTime) {
                     i++
@@ -93,10 +105,10 @@ class WordLearning : AppCompatActivity() {
                     /*学習が終わったか確認。*/
                     if (screenCount < wordLists.size) {
                         /*学習が終わっていなければ学習画面を表示*/
-                        returnScreen(wordLevle, chooseTime, screenCount, wordLists)
+                        returnScreen(wordLevle, chooseTime, screenCount, wordLists,wordLanguage)
                     } else {
                         /*学習が終わったらテスト画面を表示*/
-                        wordTestScreen(wordLevle, wordLists)
+                        wordTestScreen(wordLevle, wordLists,wordLanguage)
                     }
                 }
             } catch (ex: InterruptedException) {
@@ -112,22 +124,25 @@ class WordLearning : AppCompatActivity() {
         wordLevle: String?,
         chooseTime: Int,
         screenCount: Int,
-        wordLists: ArrayList<WordResult>
+        wordLists: ArrayList<WordResult>,
+        wordLanguage: String?
     ) {
         val wordLearning = Intent(this, WordLearning::class.java)
         wordLearning.putExtra("wordLever", wordLevle)
         wordLearning.putExtra("chooseTime", chooseTime)
         wordLearning.putExtra("screenCount", screenCount)
+        wordLearning.putExtra("language", wordLanguage)
         wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
         startActivity(wordLearning)
         finish()
     }
     /*テスト画面を表示*/
-    fun wordTestScreen(wordLevle: String?, wordLists: ArrayList<WordResult>) {
-        val wordLearning = Intent(this, WordTest::class.java)
-        wordLearning.putExtra("wordLever", wordLevle)
-        wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
-        startActivity(wordLearning)
+    fun wordTestScreen(wordLevle: String?, wordLists: ArrayList<WordResult>, wordLanguage: String?) {
+        val wordTest = Intent(this, WordTest::class.java)
+        wordTest.putExtra("wordLever", wordLevle)
+        wordTest.putExtra("language", wordLanguage)
+        wordTest.putParcelableArrayListExtra("wordLists", wordLists)
+        startActivity(wordTest)
         finish()
     }
 }

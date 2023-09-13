@@ -54,7 +54,9 @@ public class WordSelect {
                                 rs.getString("WORD_HURIGANA"),
                                 rs.getString("WORD_HURIGANA_TEST1"),
                                 rs.getString("WORD_HURIGANA_TEST2"),
-                                0
+                                0,
+                                rs.getString("WORD_ENGLISH"),
+                                rs.getString("WORD_KOREA")
                         )
                 );
             }

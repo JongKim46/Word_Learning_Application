@@ -4,9 +4,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import java.nio.charset.Charset
-import java.nio.file.Files
-import java.nio.file.Paths
 
 
 class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.CursorFactory?,version: Int)
@@ -21,12 +18,12 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
                 "WORD_LEVEL_N3 INT(1), " +
                 "WORD_LEVEL_N4 INT(1), " +
                 "WORD_LEVEL_N5 INT(1), " +
-                "WORD_KANJI VARCHAR(100), " +
-                "WORD_HURIGANA VARCHAR(100), " +
-                "WORD_HURIGANA_TEST1 VARCHAR(100), " +
-                "WORD_HURIGANA_TEST2 VARCHAR(100), " +
-                "WORD_ENGLISH VARCHAR(100), " +
-                "WORD_KOREA VARCHAR(100)) "
+                "WORD_KANJI VARCHAR(30), " +
+                "WORD_HURIGANA VARCHAR(50), " +
+                "WORD_HURIGANA_TEST1 VARCHAR(50), " +
+                "WORD_HURIGANA_TEST2 VARCHAR(50), " +
+                "WORD_ENGLISH VARCHAR(200), " +
+                "WORD_KOREA VARCHAR(200)) "
         db?.execSQL(sql)
         Log.d("TABLE WORD", "TABLE WORD作成完了")
         delete(db!!)
@@ -37,16 +34,19 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
 
     }
 
-    fun insert(db: SQLiteDatabase, wordSQL: ArrayList<String>){
+    fun insert(db: SQLiteDatabase, wordSQL: ArrayList<String>): Int{
+        var success : Int = 0
         try {
             for (sql in wordSQL){
                 db.execSQL(sql)
             }
             Log.d("TABLE WORD", "TABLE Insert完了")
+            success = 1
+
         }catch (e: Exception){
             Log.d("TABLE WORD", "TABLE Insert失敗")
         }
-
+        return success
     }
 
     fun select(db: SQLiteDatabase, wordLevle: String, wordLists: ArrayList<WordResult>) : ArrayList<WordResult>?{
@@ -60,21 +60,21 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
         }
 
         var rs = db.rawQuery(levelSql, null)
+
         while (rs.moveToNext()){
-            wordLists.add(
-                WordResult(
-                    rs.getInt(rs.getColumnIndex("WORD_ID")),
-                    rs.getString(rs.getColumnIndex("WORD_KANJI")),
-                    rs.getString(rs.getColumnIndex("WORD_HURIGANA")),
-                    rs.getString(rs.getColumnIndex("WORD_HURIGANA_TEST1")),
-                    rs.getString(rs.getColumnIndex("WORD_HURIGANA_TEST2")),
-                    0,
-                    rs.getString(rs.getColumnIndex("word_english")),
-                    rs.getString(rs.getColumnIndex("word_korea"))
-                )
+            var word = WordResult(
+                rs.getInt(rs.getColumnIndex("WORD_ID")),
+                rs.getString(rs.getColumnIndex("WORD_KANJI")),
+                rs.getString(rs.getColumnIndex("WORD_HURIGANA")),
+                rs.getString(rs.getColumnIndex("WORD_HURIGANA_TEST1")),
+                rs.getString(rs.getColumnIndex("WORD_HURIGANA_TEST2")),
+                0,
+                rs.getString(rs.getColumnIndex("WORD_ENGLISH")),
+                rs.getString(rs.getColumnIndex("WORD_KOREA"))
             )
+            wordLists?.add(word)
         }
-        Log.d("select wordLists", wordLists.toString())
+        Log.d("select wordLists2", wordLists.toString())
         return wordLists
     }
 

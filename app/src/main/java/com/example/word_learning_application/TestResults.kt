@@ -24,9 +24,11 @@ class TestResults : AppCompatActivity() {
         var wordLevle = intent.getStringExtra("wordLever")
         var wordLists = intent?.getSerializableExtra("wordLists") as ArrayList<WordResult>
 
+        /*学習言語*/
+        val wordLanguage = intent.getStringExtra("language")
 
         wordTitle.text = "$wordLevle TEST結果"
-            var wordList = WordResultList(this, wordLists)
+            var wordList = WordResultList(this, wordLists, wordLanguage)
             wordTestResultList.adapter = wordList
 
 

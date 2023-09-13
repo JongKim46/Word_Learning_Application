@@ -40,6 +40,10 @@ class WordTest : AppCompatActivity() {
         var wordLevle = intent.getStringExtra("wordLever")
         var screenCount: Int? = intent?.getIntExtra("screenCount", 0)?.toInt()
         var wordLists = intent?.getSerializableExtra("wordLists") as ArrayList<WordResult>
+
+        /*学習言語*/
+        val wordLanguage = intent.getStringExtra("language")
+
         var wordanswer = wordLists[screenCount!!]?.hurigana
 
         val but1 = findViewById<Button>(R.id.button1)
@@ -65,14 +69,14 @@ class WordTest : AppCompatActivity() {
         but3.text = randomTest[2]
 
         //thread実施
-        TimerFun(but1, but2, but3, wordLists, screenCount, wordanswer, wordLevle)
+        TimerFun(but1, but2, but3, wordLists, screenCount, wordanswer, wordLevle,wordLanguage)
 
         but1.setOnClickListener {
             handler.post {
                 wordSwitch = false
                 btnCheck(butarray, wordanswer, but1, wordLists)
                 stopTime()
-                returnScreen(wordLevle, screenCount, wordLists)
+                returnScreen(wordLevle, screenCount, wordLists, wordLanguage)
             }
         }
         but2.setOnClickListener {
@@ -80,7 +84,7 @@ class WordTest : AppCompatActivity() {
                 wordSwitch = false
                 btnCheck(butarray, wordanswer, but2, wordLists)
                 stopTime()
-                returnScreen(wordLevle, screenCount, wordLists)
+                returnScreen(wordLevle, screenCount, wordLists, wordLanguage)
             }
         }
         but3.setOnClickListener {
@@ -88,7 +92,7 @@ class WordTest : AppCompatActivity() {
                 wordSwitch = false
                 btnCheck(butarray, wordanswer, but3, wordLists)
                 stopTime()
-                returnScreen(wordLevle, screenCount, wordLists)
+                returnScreen(wordLevle, screenCount, wordLists, wordLanguage)
             }
         }
 
@@ -106,25 +110,28 @@ class WordTest : AppCompatActivity() {
     fun returnScreen(
         wordLevle: String?,
         screenCount: Int,
-        wordLists: ArrayList<WordResult>
+        wordLists: ArrayList<WordResult>,
+        wordLanguage: String?
     ) {
         if (screenCount < wordLists.size - 1) {
-            val wordLearning = Intent(this, WordTest::class.java)
-            wordLearning.putExtra("wordLever", wordLevle)
-            wordLearning.putExtra("screenCount", screenCount + 1)
-            wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
-            startActivity(wordLearning)
+            val wordTest = Intent(this, WordTest::class.java)
+            wordTest.putExtra("wordLever", wordLevle)
+            wordTest.putExtra("screenCount", screenCount + 1)
+            wordTest.putParcelableArrayListExtra("wordLists", wordLists)
+            wordTest.putExtra("language", wordLanguage)
+            startActivity(wordTest)
             finish()
         } else {
-            wordTestScreen(wordLevle, wordLists)
+            wordTestResults(wordLevle, wordLists, wordLanguage)
         }
     }
 
-    fun wordTestScreen(wordLevle: String?, wordLists: ArrayList<WordResult>) {
-        val wordLearning = Intent(this, TestResults::class.java)
-        wordLearning.putExtra("wordLever", wordLevle)
-        wordLearning.putParcelableArrayListExtra("wordLists", wordLists)
-        startActivity(wordLearning)
+    fun wordTestResults(wordLevle: String?, wordLists: ArrayList<WordResult>, wordLanguage: String?) {
+        val testResults = Intent(this, TestResults::class.java)
+        testResults.putExtra("wordLever", wordLevle)
+        testResults.putParcelableArrayListExtra("wordLists", wordLists)
+        testResults.putExtra("language", wordLanguage)
+        startActivity(testResults)
         finish()
     }
 
@@ -175,6 +182,7 @@ class WordTest : AppCompatActivity() {
         screenCount: Int,
         wordanswer: String?,
         wordLevle: String?,
+        wordLanguage: String?,
     ) {
 
         mWorker = Thread {
@@ -199,7 +207,7 @@ class WordTest : AppCompatActivity() {
                     handler.post {
                         noClickBtn(but1, but2, but3, wordanswer)
                         SystemClock.sleep(60)
-                        returnScreen(wordLevle, screenCount, wordLists)
+                        returnScreen(wordLevle, screenCount, wordLists, wordLanguage)
                     }
                 }
             } catch (ex: InterruptedException) {

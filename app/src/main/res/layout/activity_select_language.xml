@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    >
+    tools:context=".SecondChooseActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,6 +33,7 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="100dp" />
 
+
         </LinearLayout>
 
         <LinearLayout
@@ -43,55 +44,22 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <Button
-                android:id="@+id/N5_button"
+                android:id="@+id/word_English"
                 android:layout_width="293dp"
                 android:layout_height="46dp"
-                android:text="@string/N5_button"
+                android:text="@string/word_English"
                 tools:layout_editor_absoluteX="59dp"
                 tools:layout_editor_absoluteY="131dp" />
 
             <Button
-                android:id="@+id/N4_button"
+                android:id="@+id/word_Korean"
                 android:layout_width="293dp"
                 android:layout_height="46dp"
-                android:text="@string/N4_button"
+                android:text="@string/word_Korean"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="176dp" />
-
-            <Button
-                android:id="@+id/N3_button"
-                android:layout_width="293dp"
-                android:layout_height="46dp"
-                android:text="@string/N3_button"
-                tools:layout_editor_absoluteX="59dp"
-                tools:layout_editor_absoluteY="222dp" />
-
-            <Button
-                android:id="@+id/N2_button"
-                android:layout_width="293dp"
-                android:layout_height="46dp"
-                android:text="@string/N2_button"
-                tools:layout_editor_absoluteX="59dp"
-                tools:layout_editor_absoluteY="267dp" />
-
-            <Button
-                android:id="@+id/N1_button"
-                android:layout_width="293dp"
-                android:layout_height="46dp"
-                android:text="@string/N1_button"
-                tools:layout_editor_absoluteX="59dp"
-                tools:layout_editor_absoluteY="312dp" />
-
-            <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="293dp"
-                android:layout_height="46dp"
-                android:text="@string/cancel"
-                tools:layout_editor_absoluteX="59dp"
-                tools:layout_editor_absoluteY="222dp" />
 
         </LinearLayout>
 
