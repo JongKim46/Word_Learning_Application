@@ -22,36 +22,33 @@ class Loading_Screen : AppCompatActivity() {
         var _count = 0
 
         var mainthread = Thread {
-            var DBcheck = intent?.getBooleanExtra("DBcheck", true)
-
             //LocalDB TABLE名設定
-            if (DBcheck!!) {
-                var dbHelper = LocalDBHelper(this, "WordTable.db", null, 1)
-                var database = dbHelper.writableDatabase
-                //dbHelper.delete(database)
-                dbHelper.onCreate(database)
 
-                var wordSQl1 = resources.openRawResource(R.raw.jlpt_n1)
-                var wordSQl2 = resources.openRawResource(R.raw.jlptn2)
-                var wordSQl3 = resources.openRawResource(R.raw.jlpt_n3)
-                var wordSQl45 = resources.openRawResource(R.raw.jlpt_n4n5)
+            var dbHelper = LocalDBHelper(this, "WordTable.db", null, 1)
+            var database = dbHelper.writableDatabase
+            //dbHelper.delete(database)
+            dbHelper.onCreate(database)
 
-                var _wordSqlList = arrayOf(wordSQl1, wordSQl2,wordSQl3,wordSQl45)
-                for(wordSql in _wordSqlList){
-                    _progressBar += 25
-                    _count += 1
-                    handler.post{
-                        progressBar.progress = _progressBar
-                        countView.text = "${_count}/4"
-                    }
-                    Log.d("TABLE WORD _wordSqlList", "$wordSql")
-                    var wordSQL = readSQL(wordSql)
-                    dbHelper.insert(database, wordSQL)
+            var wordSQl1 = resources.openRawResource(R.raw.jlpt_n1)
+            var wordSQl2 = resources.openRawResource(R.raw.jlptn2)
+            var wordSQl3 = resources.openRawResource(R.raw.jlpt_n3)
+            var wordSQl45 = resources.openRawResource(R.raw.jlptn4n5)
+
+            var _wordSqlList = arrayOf(wordSQl1, wordSQl2, wordSQl3, wordSQl45)
+            for (wordSql in _wordSqlList) {
+                _progressBar += 25
+                _count += 1
+                handler.post {
+                    progressBar.progress = _progressBar
+                    countView.text = "${_count}/4"
                 }
-                handler.post{
-                    startActivity(Intent(this, SelectLanguage::class.java))
-                    finish()
-                }
+                Log.d("TABLE WORD _wordSqlList", "$wordSql")
+                var wordSQL = readSQL(wordSql)
+                dbHelper.insert(database, wordSQL)
+            }
+            handler.post {
+                startActivity(Intent(this, SelectLanguage::class.java))
+                finish()
             }
         }
         mainthread.start()
