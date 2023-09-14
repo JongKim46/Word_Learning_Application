@@ -56,9 +56,9 @@ class LocalDBHelper(context: Context?,name:String?,factory:SQLiteDatabase.Cursor
             "N4" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N4 = 1 ORDER BY RANDOM() LIMIT 10"
             "N3" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N3 = 1 ORDER BY RANDOM() LIMIT 10"
             "N2" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N2 = 1 ORDER BY RANDOM() LIMIT 10"
-            "N1" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N1 = 1 ORDER BY RANDOM() LIMIT 3"
+            "N1" -> levelSql = "SELECT DISTINCT * FROM WORD_TABLE WHERE WORD_LEVEL_N1 = 1 ORDER BY RANDOM() LIMIT 10"
         }
-
+        Log.i("SQL", levelSql)
         var rs = db.rawQuery(levelSql, null)
 
         while (rs.moveToNext()){
